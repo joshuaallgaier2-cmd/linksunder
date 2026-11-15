@@ -3,6 +3,7 @@ import { scenarioSchema, demoScenario } from '../shared/schema';
 import { publicAddress, validateTarget } from '../server/security';
 import { htmlReport } from '../server/report';
 import { newRun } from '../server/runner';
+import { formatTimestamp } from '../client/time';
 describe('scenario validation', () => {
   it('rejects invalid configurations', () => {
     expect(scenarioSchema.safeParse({ name: '', url: 'hello', timeout: -1 }).success).toBe(false);
@@ -56,4 +57,14 @@ it('escapes report content and stays offline', () => {
   expect(html).toContain('&lt;script&gt;');
   expect(html).not.toContain('<script>');
   expect(html).not.toContain('https://');
+});
+describe('timestamp formatting', () => {
+  it('formats a known UTC timestamp deterministically', () => {
+    expect(formatTimestamp('2026-01-02T15:04:05.000Z', 'UTC', 'en-US')).toBe(
+      'Jan 2, 2026, 3:04 PM',
+    );
+  });
+  it('returns a clear fallback for invalid timestamps', () => {
+    expect(formatTimestamp('not-a-timestamp', 'UTC')).toBe('Invalid date');
+  });
 });
