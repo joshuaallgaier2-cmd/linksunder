@@ -623,6 +623,22 @@ function App() {
                         </button>
                         <button
                           type="button"
+                          aria-label="Duplicate step"
+                          onClick={() =>
+                            setScenario({
+                              ...scenario,
+                              steps: [
+                                ...scenario.steps.slice(0, i + 1),
+                                { ...s },
+                                ...scenario.steps.slice(i + 1),
+                              ],
+                            })
+                          }
+                        >
+                          <Plus size={16} />
+                        </button>
+                        <button
+                          type="button"
                           aria-label="Remove step"
                           onClick={() =>
                             setScenario({
