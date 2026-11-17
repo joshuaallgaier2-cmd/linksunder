@@ -11,6 +11,7 @@ export const actions = [
   'value',
   'screenshot',
 ] as const;
+export const MAX_SCENARIO_STEPS = 50;
 export const stepSchema = z.object({
   action: z.enum(actions),
   selector: z.string().max(500).default(''),
@@ -26,7 +27,7 @@ export const scenarioSchema = z.object({
   timeout: z.number().int().min(1000).max(30000).default(10000),
   screenshots: z.boolean().default(false),
   maskSelectors: z.array(z.string().min(1).max(500)).max(20).default([]),
-  steps: z.array(stepSchema).max(50).default([]),
+  steps: z.array(stepSchema).max(MAX_SCENARIO_STEPS).default([]),
 });
 export type Scenario = z.infer<typeof scenarioSchema>;
 export type Step = z.infer<typeof stepSchema>;

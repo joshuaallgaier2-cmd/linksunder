@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+const appURL = `http://127.0.0.1:${process.env.LINKSUNDER_E2E_PORT || '4317'}`;
 test('demo, reports, real history and responsive themes', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Build for the unexpected.' })).toBeVisible();
@@ -74,13 +75,52 @@ test('builds and runs an assertion through the no-code UI', async ({ page }) => 
   await expect(page.getByRole('link', { name: 'Download JSON Report' })).toBeVisible();
   await expect(page.locator('.heading .badge')).toHaveText('pass');
 });
+test('duplicates a scenario step, keeps focus predictable, and edits independently at 390px', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'New test', exact: true }).click();
+  await page.getByRole('button', { name: 'Add step' }).click();
+  await page.getByLabel('Step 1 action').selectOption('fill');
+  await page.getByLabel('Step 1 selector').fill('#note');
+  await page.getByLabel('Step 1 value').fill('original value');
+  await page.getByRole('button', { name: 'Add step' }).click();
+  await page.getByLabel('Step 2 selector').fill('#status');
+  await page.getByRole('button', { name: 'Duplicate step' }).first().click();
+  await expect(page.getByLabel('Step 2 selector')).toHaveValue('#note');
+  await expect(page.getByLabel('Step 2 value')).toHaveValue('original value');
+  await expect(page.getByLabel('Step 3 selector')).toHaveValue('#status');
+  await expect(page.getByRole('button', { name: 'Duplicate step' }).first()).toBeFocused();
+  await page.getByLabel('Step 2 selector').fill('#copy');
+  await page.getByLabel('Step 2 value').fill('edited copy');
+  await expect(page.getByLabel('Step 1 selector')).toHaveValue('#note');
+  await expect(page.getByLabel('Step 1 value')).toHaveValue('original value');
+  await expect(page.getByLabel('Step 3 selector')).toHaveValue('#status');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
+});
+
+test('does not allow adding or duplicating more than the scenario step limit', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'New test', exact: true }).click();
+  const addStep = page.getByRole('button', { name: 'Add step' });
+  for (let count = 0; count < 50; count += 1) {
+    await addStep.click();
+  }
+  await expect(page.locator('.stepedit')).toHaveCount(50);
+  await expect(addStep).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Duplicate step' }).first()).toBeDisabled();
+  await expect(page.getByText(/50 of 50 steps\. Remove a step/)).toBeVisible();
+});
 test('serializes runs and cancels a pending browser', async ({ request }) => {
   const headers = { 'X-LinkSunder': 'local' };
   const result = await request.post('/api/runs', {
     headers,
     data: {
       name: 'Cancel pending check',
-      url: 'http://127.0.0.1:4317/demo/fixed',
+      url: `${appURL}/demo/fixed`,
       steps: [{ action: 'check', selector: '#never' }],
     },
   });
@@ -88,7 +128,7 @@ test('serializes runs and cancels a pending browser', async ({ request }) => {
   const run = await result.json();
   const second = await request.post('/api/runs', {
     headers,
-    data: { name: 'Busy', url: 'http://127.0.0.1:4317/demo/fixed' },
+    data: { name: 'Busy', url: `${appURL}/demo/fixed` },
   });
   expect(second.status()).toBe(409);
   await request.post('/api/cancel', { headers, data: {} });
