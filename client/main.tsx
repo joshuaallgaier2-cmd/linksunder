@@ -6,6 +6,7 @@ import {
   ArrowUp,
   Check,
   ChevronRight,
+  Copy,
   Download,
   FlaskConical,
   LayoutDashboard,
@@ -18,7 +19,14 @@ import {
   WifiOff,
   X,
 } from 'lucide-react';
-import { actions, scenarioSchema, type Scenario, type Step, type Run } from '../shared/schema';
+import {
+  actions,
+  MAX_SCENARIO_STEPS,
+  scenarioSchema,
+  type Scenario,
+  type Step,
+  type Run,
+} from '../shared/schema';
 import { formatRunTimestamp } from './format-run-timestamp';
 import './style.css';
 import '@fontsource/inter/latin-400.css';
@@ -529,6 +537,8 @@ function App() {
                     <button
                       type="button"
                       className="secondary"
+                      disabled={scenario.steps.length >= MAX_SCENARIO_STEPS}
+                      title={`Add up to ${MAX_SCENARIO_STEPS} steps`}
                       onClick={() =>
                         setScenario({
                           ...scenario,
@@ -548,6 +558,11 @@ function App() {
                       <Plus size={16} /> Add step
                     </button>
                   </div>
+                  <p className="hint">
+                    {scenario.steps.length >= MAX_SCENARIO_STEPS
+                      ? `${MAX_SCENARIO_STEPS} of ${MAX_SCENARIO_STEPS} steps. Remove a step before adding or duplicating another.`
+                      : `${scenario.steps.length} of ${MAX_SCENARIO_STEPS} steps`}
+                  </p>
                   {scenario.steps.map((s, i) => (
                     <div className="stepedit" key={i}>
                       <span className="stepnum">{i + 1}</span>
@@ -625,6 +640,8 @@ function App() {
                         <button
                           type="button"
                           aria-label="Duplicate step"
+                          title="Duplicate step"
+                          disabled={scenario.steps.length >= MAX_SCENARIO_STEPS}
                           onClick={() =>
                             setScenario({
                               ...scenario,
@@ -636,7 +653,7 @@ function App() {
                             })
                           }
                         >
-                          <Plus size={16} />
+                          <Copy size={16} />
                         </button>
                         <button
                           type="button"
