@@ -6,6 +6,13 @@ A local, open-source resilience lab for websites you own. Build a browser scenar
 disconnect the network, fail an API, or delay selected requests — then check whether
 your UI preserves the state that matters. No account, cloud service, or AI API.
 
+### Download the application
+
+**[⬇ Download for Windows — EXE installer](https://github.com/kavianpcx/linksunder/releases/download/v0.2.0/LinkSunder-0.2.0-Windows-x64.exe)** · **[⬇ Download for Linux — DEB installer](https://github.com/kavianpcx/linksunder/releases/download/v0.2.0/LinkSunder-0.2.0-Linux-amd64.deb)**
+
+**Download → Install → Open LinkSunder.** No terminal commands or developer tools required.
+On Windows, open the downloaded EXE, finish installation, then open LinkSunder from Start or the desktop shortcut.
+
 [راهنمای فارسی](README.fa.md) · [Scenarios](docs/scenarios.md) · [Security](SECURITY.md)
 
 ![Real dashboard after running both demo scenarios](docs/screenshots/dashboard.png)
@@ -18,12 +25,12 @@ LinkSunder is a desktop application, with the real test engine included. Users d
 not install Node.js, npm, Git or Playwright and do not type commands to start it.
 There is no trial mode, demo-only edition, account or paid feature gate.
 
-| Platform                             | File                     | What to do                                                                                                            |
-| ------------------------------------ | ------------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| Windows 11, x64                      | Windows `.exe` installer | Open the installer, finish installation, then open LinkSunder from Start or the desktop shortcut.                     |
-| Windows, x64 portable                | Windows `.zip`           | Extract the entire folder and open `LinkSunder.exe`. Keep its resources beside it.                                    |
-| Ubuntu / Debian desktop, x64         | Linux `.deb`             | Open it in the system software installer, install, then launch LinkSunder from Applications.                          |
-| Other compatible Linux desktops, x64 | `.AppImage`              | Allow execution in file Properties, then double-click. System library/FUSE compatibility depends on the distribution. |
+| Platform                             | File                                                                                                                         | What to do                                                                                                            |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Windows 11, x64                      | [Download EXE installer](https://github.com/kavianpcx/linksunder/releases/download/v0.2.0/LinkSunder-0.2.0-Windows-x64.exe)  | Open the installer, finish installation, then open LinkSunder from Start or the desktop shortcut.                     |
+| Windows, x64 portable                | [Download ZIP](https://github.com/kavianpcx/linksunder/releases/download/v0.2.0/LinkSunder-0.2.0-Windows-x64.zip)            | Extract the entire folder and open `LinkSunder.exe`. Keep its resources beside it.                                    |
+| Ubuntu / Debian desktop, x64         | [Download DEB installer](https://github.com/kavianpcx/linksunder/releases/download/v0.2.0/LinkSunder-0.2.0-Linux-amd64.deb)  | Open it in the system software installer, install, then launch LinkSunder from Applications.                          |
+| Other compatible Linux desktops, x64 | [Download AppImage](https://github.com/kavianpcx/linksunder/releases/download/v0.2.0/LinkSunder-0.2.0-Linux-x86_64.AppImage) | Allow execution in file Properties, then double-click. System library/FUSE compatibility depends on the distribution. |
 
 The desktop packages include the application runtime and test Chromium. They start
 their engine automatically on loopback and stop it when the window closes. The
@@ -47,7 +54,10 @@ requirements. A responsive UI does not mean a standalone mobile test engine exis
 The optional **Run Demo** button is a guided example inside the full application,
 not a restriction on testing your own sites. There are no pre-filled fake results.
 
-## Build from source — developers only
+<details>
+<summary>For developers only: build and run from source</summary>
+
+## Build from source
 
 Requires **Node.js 22.12+** (24 LTS recommended), npm, and Git.
 
@@ -66,6 +76,8 @@ If the browser CDN is unavailable, set `LINKSUNDER_BROWSER` to an installed Chro
 executable before setup and startup. No administrator rights are required by this app.
 
 For a production build: `npm run build`, then `npm run start`.
+
+</details>
 
 ## Demo: the same failure, two different outcomes
 
@@ -164,8 +176,18 @@ npm run build
 `npm test` includes real browser integration tests; run setup first. E2E tests use
 fresh subdirectories in `.e2e-data/` and write real screenshots to `docs/screenshots/`.
 Stop the development server before E2E tests (they own port 4317). CI covers checks on
-Linux and Windows. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [roadmap](docs/roadmap.md).
+Linux and Windows. Anyone can fork the project and propose changes without upstream
+write access; see [CONTRIBUTING.md](CONTRIBUTING.md) for the step-by-step guide and
+the [roadmap](docs/roadmap.md) for planned work.
 
 ## License
 
 [MIT](LICENSE). Contributions welcome.
+
+## Original project
+
+LinkSunder is an open-source project originally maintained by
+[kavianpcx](https://github.com/kavianpcx). If you are using a fork, please refer
+to the [official upstream repository](https://github.com/kavianpcx/linksunder)
+for the original project and updates. Linking back to the upstream project is
+appreciated.
