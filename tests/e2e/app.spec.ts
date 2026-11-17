@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+const appURL = `http://127.0.0.1:${process.env.LINKSUNDER_E2E_PORT || '4317'}`;
 test('demo, reports, real history and responsive themes', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Build for the unexpected.' })).toBeVisible();
@@ -119,7 +120,7 @@ test('serializes runs and cancels a pending browser', async ({ request }) => {
     headers,
     data: {
       name: 'Cancel pending check',
-      url: 'http://127.0.0.1:4317/demo/fixed',
+      url: `${appURL}/demo/fixed`,
       steps: [{ action: 'check', selector: '#never' }],
     },
   });
@@ -127,7 +128,7 @@ test('serializes runs and cancels a pending browser', async ({ request }) => {
   const run = await result.json();
   const second = await request.post('/api/runs', {
     headers,
-    data: { name: 'Busy', url: 'http://127.0.0.1:4317/demo/fixed' },
+    data: { name: 'Busy', url: `${appURL}/demo/fixed` },
   });
   expect(second.status()).toBe(409);
   await request.post('/api/cancel', { headers, data: {} });
