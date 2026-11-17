@@ -74,6 +74,17 @@ test('builds and runs an assertion through the no-code UI', async ({ page }) => 
   await expect(page.getByRole('link', { name: 'Download JSON Report' })).toBeVisible();
   await expect(page.locator('.heading .badge')).toHaveText('pass');
 });
+test('duplicates a scenario step with its values', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'New test', exact: true }).click();
+  await page.getByRole('button', { name: 'Add step' }).click();
+  await page.getByLabel('Step 1 selector').fill('#note');
+  await page.getByRole('button', { name: 'Add step' }).click();
+  await page.getByLabel('Step 2 selector').fill('#status');
+  await page.getByRole('button', { name: 'Duplicate step' }).first().click();
+  await expect(page.getByLabel('Step 2 selector')).toHaveValue('#note');
+  await expect(page.getByLabel('Step 3 selector')).toHaveValue('#status');
+});
 test('serializes runs and cancels a pending browser', async ({ request }) => {
   const headers = { 'X-LinkSunder': 'local' };
   const result = await request.post('/api/runs', {
