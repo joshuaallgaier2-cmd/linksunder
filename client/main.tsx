@@ -19,6 +19,7 @@ import {
   X,
 } from 'lucide-react';
 import { actions, scenarioSchema, type Scenario, type Step, type Run } from '../shared/schema';
+import { formatRunTimestamp } from './format-run-timestamp';
 import './style.css';
 import '@fontsource/inter/latin-400.css';
 import '@fontsource/inter/latin-600.css';
@@ -341,7 +342,7 @@ function App() {
                   <h2>
                     Recent runs <span className="count">{runs.length}</span>
                   </h2>
-                  <span>Real executions only</span>
+                  <span>Browser-local time · JSON reports use ISO timestamps</span>
                 </div>
                 {!runs.length ? (
                   <div className="empty">
@@ -393,7 +394,7 @@ function App() {
                               {r.passed} / {r.assertions}
                             </td>
                             <td>{(r.duration / 1000).toFixed(1)}s</td>
-                            <td>{new Date(r.started).toLocaleTimeString()}</td>
+                            <td>{formatRunTimestamp(r.started)}</td>
                           </tr>
                         ))}
                       </tbody>
